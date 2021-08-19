@@ -1,13 +1,13 @@
 class Board:
     def __init__(self, size):
-        self.board = []
-        self.rows = size
-        self.cols = size
+        self._board = []
+        self._rows = size
+        self._cols = size
         self._create_board()
 
     def display(self):
-        for row in range(self.rows):
-            for col in range(self.cols):
+        for row in range(self._rows):
+            for col in range(self._cols):
                 self._pretty_print(col, row)
             print()
         print()
@@ -16,9 +16,9 @@ class Board:
         print("Select a cell to put a marker:")
         cell_number = 0
 
-        for row in range(self.rows):
-            for col in range(self.cols):
-                if self.board[row][col] is None:
+        for row in range(self._rows):
+            for col in range(self._cols):
+                if self._board[row][col] is None:
                     print(cell_number, end=" ")
                 else:
                     print('.', end=" ")
@@ -30,16 +30,16 @@ class Board:
     def place_marker(self, cell_number, marker):
         col_num, row_num = self._extract_row_and_column_from(cell_number)
 
-        self.board[row_num][col_num] = marker
+        self._board[row_num][col_num] = marker
 
     def is_valid(self, cell_number):
         try:
             cell_number = int(cell_number)
             grid_pos = 0
 
-            for row in range(self.rows):
-                for col in range(self.cols):
-                    if cell_number == grid_pos and self.board[row][col] is None:
+            for row in range(self._rows):
+                for col in range(self._cols):
+                    if cell_number == grid_pos and self._board[row][col] is None:
                         return True
                     grid_pos += 1
 
@@ -48,15 +48,15 @@ class Board:
             return False
 
     def has_consecutive_marker_on_columns(self):
-        for col in range(self.cols):
+        for col in range(self._cols):
             has_match = True
-            prev_marker = self.board[0][col]
+            prev_marker = self._board[0][col]
 
             if prev_marker is None:
                 continue
 
-            for row in range(self.rows):
-                current_cell_marker = self.board[row][col]
+            for row in range(self._rows):
+                current_cell_marker = self._board[row][col]
                 if current_cell_marker != prev_marker or current_cell_marker is None:
                     has_match = False
                     break
@@ -67,15 +67,15 @@ class Board:
         return False
 
     def has_consecutive_marker_on_rows(self):
-        for row in range(self.cols):
+        for row in range(self._cols):
             has_match = True
-            prev_marker = self.board[row][0]
+            prev_marker = self._board[row][0]
 
             if prev_marker is None:
                 continue
 
-            for col in range(self.rows):
-                current_cell_marker = self.board[row][col]
+            for col in range(self._rows):
+                current_cell_marker = self._board[row][col]
                 if current_cell_marker != prev_marker or current_cell_marker is None:
                     has_match = False
                     break
@@ -89,17 +89,17 @@ class Board:
         return self._has_match_in_first_diagonal() or self._has_match_in_second_diagonal()
 
     def is_full(self):
-        for row in range(self.rows):
-            for col in range(self.cols):
-                if self.board[row][col] is None:
+        for row in range(self._rows):
+            for col in range(self._cols):
+                if self._board[row][col] is None:
                     return False
         return True
 
     def _extract_row_and_column_from(self, cell_number):
         row_num, col_num = None, None
         grid_pos = 0
-        for row in range(self.rows):
-            for col in range(self.cols):
+        for row in range(self._rows):
+            for col in range(self._cols):
                 if cell_number == grid_pos:
                     row_num = row
                     col_num = col
@@ -107,24 +107,24 @@ class Board:
         return col_num, row_num
 
     def _create_board(self):
-        for row in range(self.rows):
+        for row in range(self._rows):
             temp = []
-            for col in range(self.cols):
+            for col in range(self._cols):
                 temp.append(None)
 
-            self.board.append(temp)
+            self._board.append(temp)
 
     def _pretty_print(self, col, row):
-        if self.board[row][col] is None:
+        if self._board[row][col] is None:
             print('-', end=" ")
         else:
-            print(self.board[row][col], end=" ")
+            print(self._board[row][col], end=" ")
 
     def _has_match_in_first_diagonal(self):
         has_match = True
-        prev_marker = self.board[0][0]
-        for i in range(self.rows):
-            current_cell_marker = self.board[i][i]
+        prev_marker = self._board[0][0]
+        for i in range(self._rows):
+            current_cell_marker = self._board[i][i]
             if current_cell_marker != prev_marker or current_cell_marker is None:
                 has_match = False
                 break
@@ -132,13 +132,13 @@ class Board:
         return has_match
 
     def _has_match_in_second_diagonal(self):
-        last_row = self.rows - 1
-        last_column = self.cols - 1
-        prev_marker = self.board[last_row][last_column]
+        last_row = self._rows - 1
+        last_column = self._cols - 1
+        prev_marker = self._board[last_row][last_column]
         has_match = True
 
         for i in range(last_row, -1, -1):
-            current_cell_marker = self.board[i][i]
+            current_cell_marker = self._board[i][i]
             if current_cell_marker != prev_marker or current_cell_marker is None:
                 has_match = False
                 break
